@@ -21,10 +21,14 @@ import re
 import sys
 import optparse
 
-from urllib2 import urlopen, Request, HTTPError
+try:
+    from urllib.request import urlopen, Request
+    from urllib.error import HTTPError
+except ImportError:
+    from urllib2 import urlopen, Request, HTTPError
 
 SUSPICIOUS_WORDS = ("poker", "casino", "money", "blackjack", "slot-machines", "roulette")
-REGEX_URLS = re.compile(ur'(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?\xab\xbb\u201c\u201d\u2018\u2019]))')
+REGEX_URLS = re.compile(r'(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?\xab\xbb\u201c\u201d\u2018\u2019]))')
 
 UA_NORMAL = "nobot"
 UA_BOT = "msnbot"
@@ -91,7 +95,7 @@ def main():
         bold = cyan = green = red = yellow = nocolor
 
     if options.load:
-        args = open(options.load, "rb")
+        args = open(options.load, "r")
 
     for host in args:
         url = host.strip()
