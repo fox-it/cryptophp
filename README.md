@@ -21,4 +21,4 @@ The whitepaper regarding CryptoPHP can be found here:
 
 We created some Python scripts to help administrators identify CryptoPHP:
 
-[https://github.com/fox-it/cryptophp/scripts](https://github.com/fox-it/cryptophp/scripts)
+[https://github.com/fox-it/cryptophp/tree/master/scripts](https://github.com/fox-it/cryptophp/tree/master/scripts)
