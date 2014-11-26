@@ -87,7 +87,7 @@ def main():
         return 1
 
     if options.nocolor:
-        global bold, cya, green, red, yellow
+        global bold, cyan, green, red, yellow
         bold = cyan = green = red = yellow = nocolor
 
     if options.load:
