@@ -59,7 +59,7 @@ def main(directory):
             if md5 in CRYPTO_PHP_MD5_HASHES:
                 msg = 'CRYPTOPHP DETECTED!'
             found.append(path)
-            print("{}: {}".format(path, msg))
+            print("{0}: {1}".format(path, msg))
 
     if found:
         return 1
@@ -71,8 +71,8 @@ if __name__ == '__main__':
         directory = sys.argv[1]
 
     if not os.path.isdir(directory):
-        print('{!r} is not a directory, aborting'.format(directory))
+        print('{0!r} is not a directory, aborting'.format(directory))
         sys.exit(1)
 
-    print('Recursively scanning directory: {}'.format(directory))
+    print('Recursively scanning directory: {0}'.format(directory))
     sys.exit(main(directory))

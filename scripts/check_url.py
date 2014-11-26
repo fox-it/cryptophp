@@ -97,7 +97,7 @@ def main():
         url = host.strip()
         if not url.startswith('http'):
             url = 'http://' + url
-        msg = "Checking {!r} ".format(url)
+        msg = "Checking {0!r} ".format(url)
         sys.stdout.write(bold(msg))
         sys.stdout.flush()
         a = b = None
@@ -112,7 +112,7 @@ def main():
                 sys.stdout.flush()
         except HTTPError as e:
             sys.stdout.write(": ")
-            sys.stdout.write(yellow("UNKNOWN") + " ({})\n".format(e))
+            sys.stdout.write(yellow("UNKNOWN") + " ({0})\n".format(e))
             continue
 
         difference = b ^ a
@@ -129,17 +129,17 @@ def main():
             msg = yellow("POSSIBLE CRYPTOPHP DETECTED")
         else:
             msg = green("OK")
-        sys.stdout.write(bold("{}\n".format(msg)))
+        sys.stdout.write(bold("{0}\n".format(msg)))
 
         if options.verbose:
-            sys.stdout.write(" * Normal request yielded {} urls, Webcrawler request yielded {} urls. ({} suspicous links)\n".format(
+            sys.stdout.write(" * Normal request yielded {0} urls, Webcrawler request yielded {1} urls. ({2} suspicous links)\n".format(
                 len(a), len(b), len(suspicious_links),
             ))
             for url in difference:
                 if url in suspicious_links:
-                    sys.stdout.write(red("  ! {}\n".format(url)))
+                    sys.stdout.write(red("  ! {0}\n".format(url)))
                 else:
-                    sys.stdout.write("  - {}\n".format(url))
+                    sys.stdout.write("  - {0}\n".format(url))
 
 if __name__ == '__main__':
     sys.exit(main())
