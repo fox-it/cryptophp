@@ -28,7 +28,7 @@ except ImportError:
     from urllib2 import urlopen, Request, HTTPError
 
 SUSPICIOUS_WORDS = ("poker", "casino", "money", "blackjack", "slot-machines", "roulette")
-REGEX_URLS = re.compile(r'(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?\xab\xbb\u201c\u201d\u2018\u2019]))')
+REGEX_URLS = re.compile(r"\s*(?i)href\s*=\s*(\"([^\"]*\")|'[^']*'|([^'\">\s]+))")
 
 UA_NORMAL = "nobot"
 UA_BOT = "msnbot"
@@ -64,7 +64,7 @@ def get_page_urls(url, user_agent=None):
         req.add_header('User-Agent', user_agent)
     response = urlopen(req)
     urls = REGEX_URLS.findall(str(response.read()))
-    return set(url[0] for url in urls)
+    return set(url[0].strip('"\'') for url in urls)
 
 def main():
     parser = optparse.OptionParser(usage="usage: %prog [options] url [...]")
