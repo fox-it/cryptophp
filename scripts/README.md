@@ -39,8 +39,8 @@ It does this by perfoming two HTTP requests, one and one without a webcrawler us
 
 1. Download and make the script executable:
 
-		$ wget https://github.com/fox-it/cryptophp/blob/master/scripts/check_url.py
-		$ chmod +x check_filesystem.py
+		$ wget https://raw.githubusercontent.com/fox-it/cryptophp/master/scripts/check_url.py
+		$ chmod +x check_url.py
 
 2. To scan a host or url (or multiple) as the arguments, run:
 
