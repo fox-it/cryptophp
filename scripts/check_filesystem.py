@@ -12,7 +12,10 @@
 #
 import os
 import sys
-import hashlib
+try:
+    from hashlib import md5
+except ImportError:
+    from md5 import md5
 
 # from https://github.com/fox-it/cryptophp/blob/master/file_hashes.csv
 CRYPTO_PHP_MD5_HASHES = [
@@ -46,8 +49,9 @@ def main(directory):
 
             # Check contents of file
             data = ''
-            with open(path, "rb") as f:
-                data = f.read()
+            f = open(path, "rb")
+            data = f.read()
+            f.close()
 
             # Not CryptoPHP, skip
             if not is_crypto_php_shell(str(data)):
@@ -55,11 +59,11 @@ def main(directory):
 
             # Output warning            
             msg = 'POSSIBLE CRYPTOPHP!'
-            md5 = hashlib.md5(data).hexdigest()
-            if md5 in CRYPTO_PHP_MD5_HASHES:
+            md5_hash = md5(data).hexdigest()
+            if md5_hash in CRYPTO_PHP_MD5_HASHES:
                 msg = 'CRYPTOPHP DETECTED!'
             found.append(path)
-            print("{0}: {1}".format(path, msg))
+            print("%s: %s" % (path, msg))
 
     if found:
         return 1
@@ -71,8 +75,8 @@ if __name__ == '__main__':
         directory = sys.argv[1]
 
     if not os.path.isdir(directory):
-        print('{0!r} is not a directory, aborting'.format(directory))
+        print('%r is not a directory, aborting' % directory)
         sys.exit(1)
 
-    print('Recursively scanning directory: {0}'.format(directory))
+    print('Recursively scanning directory: %s' % directory)
     sys.exit(main(directory))
