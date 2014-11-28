@@ -13,32 +13,51 @@ Run this script on your server to find all "social*.png" files and determine if 
 
 An optional argument can be passed to start scanning from the directory specified by the argument, else it will default to the root directory.
 
-To scan your whole system (it can take a while), run: `./check_filesystem.py`
+1. Download and make the script executable:
 
-To scan only a specific directory, for example /var/www, run: `./check_filesystem.py /var/www`
+		$ wget https://raw.githubusercontent.com/fox-it/cryptophp/master/scripts/check_filesystem.py
+		$ chmod +x check_filesystem.py
 
+2. To scan your whole system (it can take a while), run:
+
+		./check_filesystem.py
+
+	Or scan a specific directory, for example `/home`:
+
+		./check_filesystem.py /home
+
+3. Files will either reported as suspicious or confirmed CryptoPHP shell as follows:
+
+		Recursively scanning directory: /var/www
+		/var/www/web/images/social.png: CRYPTOPHP DETECTED!
+		/var/www/web/images/social1.png: POSSIBLE CRYPTOPHP!
 
 check_url.py
 ------------
 You can use this script to determine if your website is affected by CryptoPHP.
 It does this by perfoming two HTTP requests, one and one without a webcrawler user agent.
 
-Run the script and specify a host or url (or multiple) as the arguments, for example:
+1. Download and make the script executable:
 
-`./check_url.py --verbose www.fox-it.com http://192.168.0.10/index.php`
+		$ wget https://github.com/fox-it/cryptophp/blob/master/scripts/check_url.py
+		$ chmod +x check_filesystem.py
 
-	Checking 'http://www.fox-it.com' ..: OK
-	 * Normal request yielded 15 urls, Webcrawler request yielded 15 urls. (0 suspicous links)
-	Checking 'http://192.168.0.10/index.php' ..: CRYPTOPHP DETECTED
-	 * Normal request yielded 1 urls, Webcrawler request yielded 5 urls. (4 suspicous links)
-	  ! http://xxxx/no-deposit-casino-bonus
-	  ! http://xxxx/casino-bonus-sans-depot
-	  ! http://xxxx/dolly/?p=online-casino
-	  ! http://xxxx/?p=latest-casino-bonuses
+2. To scan a host or url (or multiple) as the arguments, run:
 
-If you have multiple vhosts or urls you want to check, you can make a list and run it with the `--load` flag, for example:
+		./check_url.py --verbose www.fox-it.com http://192.168.0.10/index.php
 
-`./check_url.py --verbose --load=urls.txt`
+		Checking 'http://www.fox-it.com' ..: OK
+		 * Normal request yielded 15 urls, Webcrawler request yielded 15 urls. (0 suspicous links)
+		Checking 'http://192.168.0.10/index.php' ..: CRYPTOPHP DETECTED
+		 * Normal request yielded 1 urls, Webcrawler request yielded 5 urls. (4 suspicous links)
+		  ! http://xxxx/no-deposit-casino-bonus
+		  ! http://xxxx/casino-bonus-sans-depot
+		  ! http://xxxx/dolly/?p=online-casino
+		  ! http://xxxx/?p=latest-casino-bonuses
+
+	Or scan a list of hosts or urls, run it with `--load`:
+
+		./check_url.py --verbose --load=urls.txt
 
 
 
