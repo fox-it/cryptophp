@@ -99,15 +99,23 @@ def main():
         bold = cyan = green = red = yellow = nocolor
 
     if options.load:
-        args = open(options.load, "r")
+        f = open(options.load, "r")
+        for line in f:
+            args.append(line.strip())
+        f.close()
 
-    for host in args:
+    for (count, host) in enumerate(args):
         url = host.strip()
         if not url.startswith('http'):
             url = 'http://' + url
+
+        progress = "[%u/%u] " % (count+1, len(args))
+        sys.stdout.write(cyan(progress))
+
         msg = "Checking %r " % url
         sys.stdout.write(bold(msg))
         sys.stdout.flush()
+
         a = b = None
         try:
             a = get_page_urls(url, options.ua1)
