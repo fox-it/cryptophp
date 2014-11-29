@@ -27,7 +27,11 @@ try:
 except ImportError:
     from urllib2 import urlopen, Request, HTTPError, URLError
 
-SUSPICIOUS_WORDS = ("poker", "casino", "money", "blackjack", "slot-machines", "roulette")
+SUSPICIOUS_WORDS = (
+    "poker", "casino", "money", "blackjack", "slot-machines",
+    "roulette", "online-gambling", "black-jack", "roleta-online",
+    "online-gokkasten", "black-jack",
+)
 REGEX_URLS = re.compile(r"\s*(?i)href\s*=\s*(\"([^\"]*\")|'[^']*'|([^'\">\s]+))")
 
 UA_NORMAL = "nobot"
