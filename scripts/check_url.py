@@ -23,9 +23,9 @@ import optparse
 
 try:
     from urllib.request import urlopen, Request
-    from urllib.error import HTTPError
+    from urllib.error import HTTPError, URLError
 except ImportError:
-    from urllib2 import urlopen, Request, HTTPError
+    from urllib2 import urlopen, Request, HTTPError, URLError
 
 SUSPICIOUS_WORDS = ("poker", "casino", "money", "blackjack", "slot-machines", "roulette")
 REGEX_URLS = re.compile(r"\s*(?i)href\s*=\s*(\"([^\"]*\")|'[^']*'|([^'\">\s]+))")
@@ -101,7 +101,7 @@ def main():
         url = host.strip()
         if not url.startswith('http'):
             url = 'http://' + url
-        msg = "Checking {0!r} ".format(url)
+        msg = "Checking %r " % url
         sys.stdout.write(bold(msg))
         sys.stdout.flush()
         a = b = None
@@ -114,9 +114,15 @@ def main():
             if options.verbose:
                 sys.stdout.write(".")
                 sys.stdout.flush()
-        except HTTPError as e:
+        except (HTTPError,):
+            etype, e, tb = sys.exc_info()
             sys.stdout.write(": ")
-            sys.stdout.write(yellow("UNKNOWN") + " ({0})\n".format(e))
+            sys.stdout.write(yellow("UNKNOWN") + " (%s)\n" % e)
+            continue
+        except (URLError,):
+            etype, e, tb = sys.exc_info()
+            sys.stdout.write(": ")
+            sys.stdout.write(yellow("UNKNOWN") + " (%s)\n" % e)
             continue
 
         difference = b ^ a
@@ -133,17 +139,17 @@ def main():
             msg = yellow("POSSIBLE CRYPTOPHP DETECTED")
         else:
             msg = green("OK")
-        sys.stdout.write(bold("{0}\n".format(msg)))
+        sys.stdout.write(bold("%s\n" % msg))
 
         if options.verbose:
-            sys.stdout.write(" * Normal request yielded {0} urls, Webcrawler request yielded {1} urls. ({2} suspicous links)\n".format(
-                len(a), len(b), len(suspicious_links),
-            ))
+            sys.stdout.write(" * Normal request yielded %u urls," % len(a))
+            sys.stdout.write(" Webcrawler request yielded %u urls." % len(b))
+            sys.stdout.write(" (%u suspicous links)\n" % len(suspicious_links))
             for url in difference:
                 if url in suspicious_links:
-                    sys.stdout.write(red("  ! {0}\n".format(url)))
+                    sys.stdout.write(red("  ! %s\n" % url))
                 else:
-                    sys.stdout.write("  - {0}\n".format(url))
+                    sys.stdout.write("  - %s\n" % url)
 
 if __name__ == '__main__':
     sys.exit(main())
