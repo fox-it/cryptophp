@@ -9,9 +9,19 @@ We appreciate if you report bugs and/or suggestions.
 check_filesystem.py
 -------------------
 
-Run this script on your server to find all "social*.png" files and determine if they are CryptoPHP backdoors. 
+	$ ./check_filesystem.py --help
+	Usage: check_filesystem.py [options] directory|file [directory2|file2] [..]
+	
+	Options:
+	  -h, --help            show this help message and exit
+	  -n, --no-color        no color output [default: False]
+	  -p PATTERNS, --patterns=PATTERNS
+	                        scan only files matching the patterns (comma
+	                        seperated) [default: *.png,*.gif,*.jpg,*.bmp]
 
-An optional argument can be passed to start scanning from the directory specified by the argument, else it will default to the root directory.
+Run this script on your server to find all image files and determine if they are CryptoPHP backdoors.
+
+By default it will recursively scan starting from the root directory. This can be changed by passing one or multiple directories (or files) as the arguments to the script.
 
 1. Download and make the script executable:
 
@@ -28,14 +38,37 @@ An optional argument can be passed to start scanning from the directory specifie
 
 3. Files will either reported as suspicious or confirmed CryptoPHP shell as follows:
 
-		Recursively scanning directory: /var/www
-		/var/www/web/images/social.png: CRYPTOPHP DETECTED!
-		/var/www/web/images/social1.png: POSSIBLE CRYPTOPHP!
+		File matching patterns: ['*.png', '*.gif', '*.jpg', '*.bmp']
+		Recursively scanning directory: /
+		 /home/www/social.png: CRYPTOPHP DETECTED! (version: 1.0)
+		 /var/www/images/social.png: CRYPTOPHP DETECTED! (version: 1.0a)
+		 /tmp/thumbs/admin/assets/images/thumb.png: CRYPTOPHP DETECTED! (version: 0.3x555)
+
+
+The pattern for file matching can be changed using the `--patterns`. For example to scan all files you could specify:
+
+	$ ./check_filesystem.py --patterns '*.*' /home
+	File matching patterns: ['*']
+	Recursively scanning directory: /home
 
 check_url.py
 ------------
-You can use this script to determine if your website is affected by CryptoPHP.
-It does this by perfoming two HTTP requests, one and one without a webcrawler user agent.
+
+	$ ./check_url.py --help
+	Usage: check_url.py [options] url [...]
+	
+	Options:
+	  -h, --help            show this help message and exit
+	  -l FILE, --load=FILE  load urls from file
+	  --ua1=UA              normal user agent [default: nobot]
+	  --ua2=UA              webcrawler user agent [default: msnbot]
+	  -n, --no-color        no color output [default: False]
+	  -v, --verbose         verbose output [default: False]
+
+You can use this script to determine if your website is affected by CryptoPHP and performing the Blackhat SEO as described in our whitepaper.
+It does this by perfoming two HTTP requests, one with and one without a webcrawler user agent.
+
+This script can be run remotely and does not have to be executed on the affected server.
 
 1. Download and make the script executable:
 
