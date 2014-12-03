@@ -24,8 +24,10 @@ import optparse
 try:
     from urllib.request import urlopen, Request
     from urllib.error import HTTPError, URLError
+    from urllib.parse import urlparse
 except ImportError:
     from urllib2 import urlopen, Request, HTTPError, URLError
+    from urlparse import urlparse
 
 SUSPICIOUS_WORDS = (
     "poker", "casino", "money", "blackjack", "slot-machines",
@@ -136,6 +138,23 @@ def main():
             sys.stdout.write(": ")
             sys.stdout.write(yellow("UNKNOWN") + " (%s)\n" % e)
             continue
+
+        # discard #anchor links
+        a = set([i for i in a if not i.startswith('#')])
+        b = set([i for i in b if not i.startswith('#')])
+
+        # discard relative links
+        a = set([i for i in a if not i.startswith('/')])
+        b = set([i for i in b if not i.startswith('/')])
+
+        # discard mailto links
+        a = set([i for i in a if not i.startswith('mailto:')])
+        b = set([i for i in b if not i.startswith('mailto')])
+
+        # discard links that are to same domain/netloc
+        netloc = urlparse(url)[1]
+        a = set([i for i in a if not netloc in i])
+        b = set([i for i in b if not netloc in i])
 
         difference = b ^ a
         suspicious_links = set()
